@@ -1,0 +1,19 @@
+{
+  "name": "nodetinder",
+  "version": "1.0.0",
+  "description": "Tinder Nodejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev" : "nodemon src/app.js"
+  },
+  "keywords": [
+    "NodeJs",
+    "Javascript"
+  ],
+  "author": "Saurabh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
