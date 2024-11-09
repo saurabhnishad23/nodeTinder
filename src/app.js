@@ -1,50 +1,37 @@
 const express = require("express");
 
 const app = express();
-const { adminAuth, userAuth } = require("./middlewares/auth");
+
 // order of routing path matter. it follow like try catch error method
 
-app.use("/admin", adminAuth);
+const connectDb = require("./config/database");
+const { default: mongoose } = require("mongoose");
 
-app.get("/admin/getAllData", (req, res, next) => {
-  console.log("Auth checking");
-  res.send("All data sent");
-});
+const User = require("./models/user");
 
-app.get("/admin/deleteUser", (req, res, next) => {
-  res.send("user data deleted");
-});
+app.post("/signup", async (req, res) => {
+  const user = new User({
+    firstName: "Chaman",
+    lastName: "Singh",
+    email: "chaman@singh.com",
+    password: "chaman@123",
+  });
 
-app.get(
-  "/user",
-  userAuth,
-  (req, res, next) => {
-    next();
-  },
-  (req, res) => {
-    console.log("rh2 handler");
-    res.send({ firstName: "Saurabh", lastName: "Nishad" });
-  }
-);
-
-app.post("/user", (req, res) => {
-  res.send("Data saved Successfully");
-});
-
-app.delete("/user", (req, res) => {
-  res.send("user data deleted");
-});
-
-app.use("/test", (req, res) => {
-  res.send("Testing the server");
-});
-
-app.use("/", (err, req, res, next) => {
-  if (err) {
-    res.status(501).send("Something went wrong");
+  try {
+    await user.save();
+    res.send("Data added Successfully");
+  } catch (err) {
+    res.status(400).send("Error on saving", err.message);
   }
 });
-app.listen(3000, () => {
-  //   res.send("Hello");
-  console.log("Server Started");
-});
+
+connectDb()
+  .then(() => {
+    console.log("Database connection established");
+    app.listen(2340, () => {
+      console.log("Server is successfully listening on port 2340...");
+    });
+  })
+  .catch((err) => {
+    console.error("database connection failed");
+  });
