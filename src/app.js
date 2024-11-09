@@ -9,13 +9,11 @@ const { default: mongoose } = require("mongoose");
 
 const User = require("./models/user");
 
+app.use(express.json());
+
 app.post("/signup", async (req, res) => {
-  const user = new User({
-    firstName: "Chaman",
-    lastName: "Singh",
-    email: "chaman@singh.com",
-    password: "chaman@123",
-  });
+  console.log(req.body);
+  const user = new User(req.body);
 
   try {
     await user.save();
